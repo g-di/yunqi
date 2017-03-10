@@ -41,9 +41,9 @@
         .reg_sub {
             padding: 10px 20px;
             height: 36px;
-            line-height: 20px;
+            line-height: 14px;
             color: #1e282c;
-            background-color: #9FAFD1;
+            background-color: #96dd0e;
             font-weight: bold;
             border-radius: 6px;
             margin-top: 60px;;
@@ -55,10 +55,10 @@
     <h2 class="reg_tit">注册</h2>
     <div class="reg_con">
         <form action="#" method="post">
-            <input class="reg_input" type="text" name="name" value="" placeholder="姓名">
-            <input class="reg_input" id="USER_AGE" type="text" name="date" value="" placeholder="孕产期">
+            <input class="reg_input" type="text" id="name" name="name" value="{{$data['name']}}" placeholder="姓名">
+            <input class="reg_input" id="USER_AGE" type="text" name="date" value="{{$data['date']}}" placeholder="孕产期">
             <br>
-            <input class="reg_sub" id="tj" type="submit" value="提交">
+            <input class="reg_sub" id="tj" type="button" value="提交">
         </form>
     </div>
 </div>
@@ -85,8 +85,33 @@
         };
         $("#USER_AGE").mobiscroll($.extend(opt['date'], opt['default']));
 
-
-
+        /**
+         * ajax 提交数据
+         */
+        $('#tj').bind('click',function(){
+            $.ajax({
+                url:'/reg',
+                type:'POST', //GET
+                async:true,    //或false,是否异步
+                data:{
+                    name:$('#name').val(),date:$('#USER_AGE').val()
+                },
+                timeout:5000,    //超时时间
+                dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                beforeSend:function(xhr){
+                    if($('#name').val() == ''){
+                        alert('请填写名字');
+                        return false;
+                    }else if($('#USER_AGE').val() == ''){
+                        alert('请选择时间');
+                        return false;
+                    }
+                },
+                success:function(data){
+                    alert(data.info);
+                }
+            })
+        });
     });
 </script>
 </body>
