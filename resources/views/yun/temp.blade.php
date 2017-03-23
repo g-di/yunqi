@@ -5,6 +5,11 @@
             模板素材
         </h1>
     </section>
+    <div class="row">
+        <div class="col-sm-12">
+            @include("layouts.message")
+        </div>
+    </div>
     <section class="content">
         <div class="row">
             <div class="col-sm-12">
@@ -27,14 +32,15 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table id="example2" class="table table-bordered table-hover dataTable text-center" role="grid"
+                                    <table id="example2" class="table table-bordered table-hover dataTable text-center"
+                                           role="grid"
                                            aria-describedby="example2_info">
                                         <thead>
                                         <tr role="row">
                                             <th class="sorting col-sm-2" aria-controls="example2" rowspan="1"
                                                 colspan="1"
                                                 aria-label="Browser: activate to sort column ascending">
-                                                孕期期数
+                                                孕产期
                                             </th>
                                             <th class="sorting col-sm-1" aria-controls="example2" rowspan="1"
                                                 colspan="1"
@@ -49,7 +55,12 @@
                                             <th class="sorting col-sm-2" aria-controls="example2" rowspan="1"
                                                 colspan="1"
                                                 aria-label="Engine version: activate to sort column ascending">
-                                                创建时间
+                                                更新时间
+                                            </th>
+                                            <th class="sorting col-sm-2" aria-controls="example2" rowspan="1"
+                                                colspan="1"
+                                                aria-label="Engine version: activate to sort column ascending">
+                                                操作
                                             </th>
                                         </tr>
                                         </thead>
@@ -58,8 +69,30 @@
                                             <tr role="row" class="odd">
                                                 <td>第{{$value->num}}周</td>
                                                 <td>{{$value->title}}</td>
-                                                <td><a href="/yun/{{$value->id}}" target="_blank">查看</a> </td>
-                                                <td>{{$value->created_at}}</td>
+                                                <td><a href="/yun/{{$value->id}}" target="_blank">查看</a></td>
+                                                <td>{{$value->updated_at}}</td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <div class="btn-group">
+                                                            <a type="button" href="#" class="btn btn-default"
+                                                               data-toggle="dropdown">操作</a>
+                                                            <button type="button"
+                                                                    class="btn btn-default dropdown-toggle"
+                                                                    data-toggle="dropdown">
+                                                                <span class="caret"></span>
+                                                                <span class="sr-only">Toggle Dropdown</span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" role="menu">
+                                                                <li>
+                                                                    <a href="{{url("/yun/tempupd/".$value->id)}}">修改</a>
+                                                                    <a class="btn-delete" data-toggle="modal"
+                                                                       data-target="#myModal"
+                                                                       data-val="{{url("/yun/tempdel/".$value->id)}}">删除</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -73,4 +106,5 @@
             </div>
         </div>
     </section>
+    @include("layouts.myModal")
 @endsection

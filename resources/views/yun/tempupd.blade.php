@@ -17,7 +17,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <form action="/yun/tempadd" method="post">
+                            <form action="/yun/tempupd" method="post">
                                 {{ csrf_field() }}
                                 <div class="">
                                     <div class="box-body">
@@ -27,32 +27,41 @@
                                                     <div class="box-header with-border box-danger form-group">
                                                         <label class="col-sm-2 control-label right-lable">选择模板:</label>
                                                         <div class="col-sm-10">
-                                                            <select class="form-control selectpicker show-tick" id="temp" data-style="btn-info" name="tid">
+                                                            <select class="form-control selectpicker show-tick"
+                                                                    id="temp" data-style="btn-info" name="tid">
                                                                 <option value=""></option>
                                                                 @foreach($list as $value)
                                                                     <option value="{{$value->id}}">{{$value->title}}</option>
                                                                 @endforeach
                                                             </select>
+                                                            <script>
+                                                                $('#temp').val('<?=$info[0]['id']?>');
+                                                            </script>
                                                         </div>
                                                     </div>
-                                                    <div id="html"></div>
+                                                    <div id="html">
+                                                        <?php $i = 0; foreach (json_decode($temp['data']) as $k => $v): ?>
+                                                        <div class="box-header with-border box-danger form-group">
+                                                            <label class="col-sm-2 control-label right-lable"><?=$info[$i]['value']?>:</label>
+                                                            <input type="hidden" name="gdk<?=$i?>" value="<?=$k?>"/>
+                                                            <div class="col-sm-10">
+                                                                <input name="gdkey<?=$i?>" type="text" value="<?=$v?>" required="" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                        <?php $i++; endforeach;?>
+                                                    </div>
                                                     <div class="box-header with-border box-danger form-group">
                                                         <label class="col-sm-2 control-label right-lable">预产期周数:</label>
                                                         <div class="col-sm-10">
-                                                            <select class="form-control selectpicker show-tick" data-style="btn-info" name="num">
-                                                                @for($i=1;$i<=$sum;$i++)
-                                                                    @if(!in_array($i,$num))
-                                                                        <option value="{{$i}}">第{{$i}}周</option>
-                                                                    @endif
-                                                                @endfor
-                                                            </select>
+                                                            <span>第<?=$temp['num']?>周</span>
+                                                            <input type="hidden" name="num" value="<?=$temp['num']?>"/>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label>正文</label>
                                                         <!-- 加载编辑器的容器 -->
-                                                        <script id="mm_container" name="content" type="text/plain">
-                                                        </script>
+                                                        <script id="mm_container" name="content"
+                                                                type="text/plain"><?=$temp['content']?></script>
 
                                                         <!-- 实例化编辑器 -->
                                                         <script type="text/javascript">
@@ -80,8 +89,10 @@
                                                             });
                                                         </script>
                                                     </div>
-                                                    <div class="form-group col-sm-12 form-submit" style="padding-bottom: 0">
-                                                        <input type="submit" value="保存" name="resubmit" class="btn btn-primary"/>
+                                                    <div class="form-group col-sm-12 form-submit"
+                                                         style="padding-bottom: 0">
+                                                        <input type="submit" value="保存" name="resubmit"
+                                                               class="btn btn-primary"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -97,32 +108,32 @@
     </section>
     <script>
         $(function () {
-            $('#temp').bind('change',function () {
-                if($(this).val() != ''){
+            $('#temp').bind('change', function () {
+                if ($(this).val() != '') {
                     $.ajax({
-                        url:'/yun/tempinfo',
-                        type:'POST', //GET
-                        async:true, //或false,是否异步
-                        data:{
-                            id:$(this).val()
+                        url: '/yun/tempinfo',
+                        type: 'POST', //GET
+                        async: true, //或false,是否异步
+                        data: {
+                            id: $(this).val()
                         },
-                        timeout:5000, //超时时间
-                        dataType:'json',
-                        success:function(data){
+                        timeout: 5000, //超时时间
+                        dataType: 'json',
+                        success: function (data) {
                             console.log(data);
                             var html = ''
-                            $.each(data,function(i,v){
+                            $.each(data, function (i, v) {
                                 html += '<div class="box-header with-border box-danger form-group">';
-                                html += '<label class="col-sm-2 control-label right-lable">'+v.value+':</label>';
-                                html += '<input type="hidden" name="gdk'+i+'" value="'+v.key+'">';
-                                html += '<div class="col-sm-10"><input name="gdkey'+i+'" type="text" value="" required class="form-control"></div></div>';
+                                html += '<label class="col-sm-2 control-label right-lable">' + v.value + ':</label>';
+                                html += '<input type="hidden" name="gdk' + i + '" value="' + v.key + '">';
+                                html += '<div class="col-sm-10"><input name="gdkey' + i + '" type="text" value="" required class="form-control"></div></div>';
                                 console.log(v.value);
                                 console.log(v.key);
                             });
                             $('#html').html(html);
                         }
                     })
-                }else{
+                } else {
                     $('#html').html('');
                 }
             });

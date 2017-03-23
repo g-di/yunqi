@@ -70,7 +70,22 @@
                                             <th class="sorting col-sm-1" aria-controls="example2" rowspan="1"
                                                 colspan="1"
                                                 aria-label="Platform(s): activate to sort column ascending">
-                                                孕期
+                                                预产期
+                                            </th>
+                                            <th class="sorting col-sm-1" aria-controls="example2" rowspan="1"
+                                                colspan="1"
+                                                aria-label="Platform(s): activate to sort column ascending">
+                                                IP
+                                            </th>
+                                            <th class="sorting col-sm-1" aria-controls="example2" rowspan="1"
+                                                colspan="1"
+                                                aria-label="Platform(s): activate to sort column ascending">
+                                                地址
+                                            </th>
+                                            <th class="sorting col-sm-1" aria-controls="example2" rowspan="1"
+                                                colspan="1"
+                                                aria-label="Platform(s): activate to sort column ascending">
+                                                注册设备（不完全）
                                             </th>
                                             <th class="sorting col-sm-2" aria-controls="example2" rowspan="1"
                                                 colspan="1"
@@ -84,6 +99,9 @@
                                             <tr role="row" class="odd">
                                                 <td>{{$value->name}}</td>
                                                 <td>{{$value->date}}</td>
+                                                <td>{{$value->ip}}</td>
+                                                <td>{{$value->cname}}</td>
+                                                <td>{{$value->device}}</td>
                                                 <td>{{$value->created_at}}</td>
                                             </tr>
                                         @endforeach

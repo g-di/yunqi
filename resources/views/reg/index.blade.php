@@ -30,7 +30,7 @@
         .reg_input {
             -webkit-appearance: none;
             width: 70%;
-            height: 26px;
+            /*height: 26px;*/
             line-height: 34px;
             outline: none;
             border: 1px solid #6ce26c;
@@ -57,6 +57,9 @@
         <form action="#" method="post">
             <input class="reg_input" type="text" id="name" name="name" value="{{$data['name']}}" placeholder="姓名">
             <input class="reg_input" id="USER_AGE" type="text" name="date" value="{{$data['date']}}" placeholder="孕产期">
+            <input type="hidden" value="" name="ip" id="ip"/>
+            <input type="hidden" value="" name="cname" id="cname"/>
+            <input type="hidden" value="" name="device" id="device"/>
             <br>
             <input class="reg_sub" id="tj" type="button" value="提交">
         </form>
@@ -65,8 +68,27 @@
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/mobiscroll_date.js" charset="gb2312"></script>
 <script src="/static/js/mobiscroll.js"></script>
+<script type="text/javascript" src="http://wurfl.io/wurfl.js"></script>
 <script type="text/javascript">
     $(function () {
+        console.log(WURFL);
+        $('#device').val(WURFL.complete_device_name);
+        var api = "http://pv.sohu.com/cityjson";//前面加上http
+        //这里api是搜狐IP地址查询接口
+        $.get(api, function (data) {
+            async:false;
+            var script = $('<script type="text/javascript"/>')[0];
+            script.defer = true;
+            script.text = data;
+            $(script).appendTo("head");
+//                console.log("cid : " + returnCitySN.cid);
+//                console.log("cip : " + returnCitySN.cip);//得到IP
+//                console.log("cname : " + returnCitySN.cname);//得到城市
+            $('#ip').val(returnCitySN.cip);
+            $('#cname').val(returnCitySN.cname);
+            inf = returnCitySN;
+        }, "text");
+
         var currYear = (new Date()).getFullYear();
         var opt = {};
         opt.date = {preset: 'date'};
@@ -84,30 +106,33 @@
             endYear: currYear + 10 //结束年份
         };
         $("#USER_AGE").mobiscroll($.extend(opt['date'], opt['default']));
-
         /**
          * ajax 提交数据
          */
-        $('#tj').bind('click',function(){
+        $('#tj').bind('click', function () {
             $.ajax({
-                url:'/reg',
-                type:'POST', //GET
-                async:true,    //或false,是否异步
-                data:{
-                    name:$('#name').val(),date:$('#USER_AGE').val()
+                url: '/reg',
+                type: 'POST', //GET
+                async: true,    //或false,是否异步
+                data: {
+                    name: $('#name').val(),
+                    date: $('#USER_AGE').val(),
+                    ip: $('#ip').val(),
+                    cname: $('#cname').val(),
+                    device: $('#device').val(),
                 },
-                timeout:5000,    //超时时间
-                dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-                beforeSend:function(xhr){
-                    if($('#name').val() == ''){
+                timeout: 5000,    //超时时间
+                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                beforeSend: function (xhr) {
+                    if ($('#name').val() == '') {
                         alert('请填写名字');
                         return false;
-                    }else if($('#USER_AGE').val() == ''){
+                    } else if ($('#USER_AGE').val() == '') {
                         alert('请选择时间');
                         return false;
                     }
                 },
-                success:function(data){
+                success: function (data) {
                     alert(data.info);
                 }
             })
